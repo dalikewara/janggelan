@@ -1,0 +1,10 @@
+{
+    "autoload": {
+        "psr-4": {
+            "mvc\\": "mvc",
+            "register\\": "register",
+            "config\\": "config",
+            "system\\": "framework/janggelan/system"
+        }
+    }
+}
