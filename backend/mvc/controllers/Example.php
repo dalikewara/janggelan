@@ -32,7 +32,7 @@ class Example extends \system\parents\Controller
     */
     public function index()
     {
-
+      
         return Parent::LOAD_VIEW('example');
     }
 }

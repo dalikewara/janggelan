@@ -29,6 +29,7 @@ class DatabaseDataController implements DataFilter
             extract($this->dataFilter($this->getData()));
 
             return [
+                'AUTO_CONNECT'          => $autoConnect,
                 'DB_COLLECTIONS'        => $collections,
                 'DB_DEFAULT_CONNECTION' => $defaultConnection,
                 'DB_HOST'               => $properties['DB_HOST'],
@@ -81,10 +82,14 @@ class DatabaseDataController implements DataFilter
         $defaultConnection = $data['default_connection'];
         $pdoFetchStyle     = $data['pdo_fetch_style'];
         $collections       = $data['connections'];
-        $properties        = $data['connections'][$defaultConnection];
+        $autoConnect       = $data['auto_connect'];
+        $properties        = $collections[$defaultConnection];
+
+        is_string($defaultConnection) ? $defaultConnection = $defaultConnection : $defaultConnection = 'mysql';
+        is_bool($autoConnect) ? $autoConnect = $autoConnect : $autoConnect = FALSE;
 
         return compact(
-            'defaultConnection', 'pdoFetchStyle', 'collections', 'properties'
+            'defaultConnection', 'pdoFetchStyle', 'collections', 'properties', 'autoConnect'
         );
     }
 }

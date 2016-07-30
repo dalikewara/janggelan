@@ -9,8 +9,10 @@
 */
 //
 // Memanggil autoload jika url bukan sebuah path folder -----------------------
-if(!file_exists(urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))))
+if($_SERVER['REQUEST_URI'] !== '/' && file_exists(ltrim(urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)), '/')))
 {
-    require_once '../backend/autoload.php';
+    return FALSE;
 }
+
+require_once '../backend/autoload.php';
 // ----------------------------------------------------------------------------
