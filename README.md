@@ -29,6 +29,10 @@ lain-lain akan segera menyusul.
 
 - dan fitur-fitur lain.
 
+## Kebutuhan Sistem
+- PHP > 5.4.
+- Extensi PHP PDO.
+
 ## Author
 
 Dali Kewara <dalikewara@windowslive.com>
