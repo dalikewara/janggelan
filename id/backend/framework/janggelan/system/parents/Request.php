@@ -16,7 +16,7 @@ class Request
     private $finalData, $urlData;
 
     /**
-    *
+    ***************************************************************************
     * Di sini Janggelan akan mengumpulkan dan mendapatkan data yang valid
     * dari setiap permintaan (Request) yang di buat di file 'mvc/requests.php'.
     *
@@ -40,7 +40,7 @@ class Request
     }
 
     /**
-    *
+    ***************************************************************************
     * Fungsi ini di gunakan untuk mendaftarkan dan membuat data permintaan
     * dengan gaya 'Satu Baris', yang berarti akan langsung mendaftarkan url
     * tanpa ada pilihan-pilihan lain, kecuali properti bawaannya.
@@ -49,17 +49,18 @@ class Request
     * @return   array
     *
     */
-    public function url($data)
+    public function url($data, $protected = NULL)
     {
         $data = explode(' ', preg_replace('/\s\s+/', ' ', $data));
 
         // Janggelan menggunakan indentitas-identitas berikut untuk memisahkan
         // data dari setiap permintaan agar lebih mudah membacanya. Variabel-variabel
         // berikut ini adalah identitas defaultnya(jika data yang diminta tidak valid).
-        $separate = ' ___ @_@ ___ ';
-        $method   = 'METHOD=BAD';
-        $url      = 'URI=BAD';
-        $args     = 'ARGS=BAD';
+        $separate  = ' ___ @_@ ___ ';
+        $method    = 'METHOD=BAD';
+        $url       = 'URI=BAD';
+        $args      = 'ARGS=BAD';
+        $protected = (!is_null($protected)) ? "$separate:::$protected:::" : '';
 
         if(isset($data[0]) AND $data[0] != NULL)
         {
@@ -83,13 +84,13 @@ class Request
             }
         }
 
-        $finalData = $this->urlData[] = [$method . $separate . $url . $separate . $args];
+        $finalData = $this->urlData[] = [$method . $separate . $url . $separate . $args . $protected];
 
         return $finalData;
     }
 
     /**
-    *
+    ***************************************************************************
     * Fungsi ini di gunakan untuk mendaftarkan dan membuat data permintaan
     * dengan gaya 'Pengelompokan', yang berarti akan mendaftarkan url secara
     * berkelompok. Fungsi ini bisa mendaftarkan banyak url(dari fungsi url()) sekaligus.

@@ -1,5 +1,7 @@
 <?php namespace mvc\controllers;
 
+use mvc\models\Example;
+
 /*
 |--------------------------------------------------------------------------
 | Contoh Controller

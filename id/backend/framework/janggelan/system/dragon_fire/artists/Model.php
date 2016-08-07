@@ -68,6 +68,85 @@ class Model extends Blueprint
 
     /**
     ***************************************************************************
+    * Fungsi untuk menambah data ke Database. Pastikan Anda mengisi dengan
+    * data yang valid.
+    *
+    * @param    array   data
+    * @return   mixed
+    *
+    */
+    public function Insert(array $data)
+    {
+        $columnName = implode(', ', array_keys($data));
+        $value      = implode(", ", array_map(function($a){return ":$a";}, array_flip($data)));
+        $bindParams = $data;
+        $prepare    = static::$dbConnect->prepare(
+            static::$dbProperties->insertProperty(static::$smartTable, $columnName, $value)
+        );
+
+        $prepare->execute($bindParams);
+    }
+
+    /**
+    ***************************************************************************
+    * Fungsi untuk memperbarui data di Database. Pastikan Anda mengisi dengan
+    * data yang valid.
+    *
+    * @param    array   value
+    * @param    array   clause
+    * @return   mixed
+    *
+    */
+    public function Update(array $value, array $clause)
+    {
+        $paramValue    = array_flip(array_map(function($a){return "{$a}value";}, array_flip($value)));
+        $paramClause   = array_flip(array_map(function($a){return "{$a}clause";}, array_flip($clause)));
+        $value         = array_flip(array_map(function($a){return "$a=:{$a}value";}, array_flip($value)));
+        $clause        = array_flip(array_map(function($a){return "$a=:{$a}clause";}, array_flip($clause)));
+        $prepareValue  = implode(', ', array_keys($value));
+        $prepareClause = implode(' AND ', array_keys($clause));
+        $bindParams    = array_merge($paramValue, $paramClause);
+        $prepare       = static::$dbConnect->prepare(
+            static::$dbProperties->updateProperty(static::$smartTable, $prepareValue, $prepareClause)
+        );
+
+        $prepare->execute($bindParams);
+    }
+
+    /**
+    ***************************************************************************
+    * Fungsi untuk menghapus data di Database. Pastikan Anda mengisi dengan
+    * data yang valid. Data akan berupa sebuah 'Clause' untuk memilih identitas
+    * data yang akan dihapus.
+    *
+    * @param    array|string   data
+    * @return   mixed
+    *
+    */
+    public function Delete($data)
+    {
+        if(is_array($data))
+        {
+            $value      = implode(" AND ", array_map(function($a){return "$a=:$a";}, array_flip($data)));
+            $bindParams = $data;
+            $prepare    = static::$dbConnect->prepare(
+                static::$dbProperties->deleteProperty(static::$smartTable, $value)
+            );
+
+            $prepare->execute($bindParams);
+        }
+        else
+        {
+            $all = preg_match('/[aA][lL]{2}/', $data) ? TRUE : FALSE;
+
+            static::$dbConnect->exec(
+                static::$dbProperties->deleteProperty(static::$smartTable, '', $all)
+            );
+        }
+    }
+
+    /**
+    ***************************************************************************
     * Fungsi untuk menampilkan dan mendapatkan semua data dari tabel. Fungsi ini juga
     * berfungsi untuk mengembalikan dan memproses data-data dari fungsi-fungsi
     * 'Artist Model' yang lain.
@@ -241,30 +320,42 @@ class Model extends Blueprint
     }
 
     // Sedang dalam proses
-    // /**
-    // ***************************************************************************
-    // *
-    // * @param    array   $tableName
-    // * @param    array   $index
-    // * @return   array
-    // *
-    // */
+    /**
+    ***************************************************************************
+    *
+    * @param    array   $tableName
+    * @param    array   $index
+    * @return   array
+    *
+    */
     // public function Relation($tableName, $index)
     // {
     //     try
     //     {
     //         if(((!is_array($tableName) AND !is_array($index)) AND (empty($tableName) AND
-    //              empty($index))) OR count($tableName) != count($index))
+    //              empty($index))) OR (count($tableName) + 1) != count($index))
     //         {
     //             Throw new DragonHandler("Parameter dari fungsi 'Relation()' salah. Silahkan periksa kembali.");
     //         }
     //
-    //         $data = [];
+    //         $clause = NULL;
+    //         $select = '_R_ALL';
+    //         $model  = explode('\\', get_called_class());
+    //         $model  = end($model);
+    //
+    //         array_unshift($tableName, $model);
+    //
+    //         $tableNameArray = $tableName;
+    //         $tableName      = implode(', ', $tableName);
     //
     //         for($i = 0; $i < count($index); $i++)
     //         {
-    //             //
+    //             $clause .= $tableNameArray[$i] . "__$i@WITH__" . $index[$i] . ', ';
     //         }
+    //
+    //         // Di sini adalah proses untuk meminta data ke Database berdasarkan data
+    //         // yang ada.
+    //         $prepare = static::$dbProperties->selectProperty($select, $tableName, $clause);
     //     }
     //     catch(DragonHandler $e)
     //     {

@@ -42,7 +42,7 @@ class DatabasePropertyController implements Property
     ***************************************************************************
     * Fungsi untuk mengembalikan dan memfilter nilai konfigurasi 'auto_connect()'
     *
-    * @return   string
+    * @return   bool
     *
     */
     public function autoConnect()
@@ -91,6 +91,66 @@ class DatabasePropertyController implements Property
 
     /**
     ***************************************************************************
+    * Fungsi untuk membuat properti penambahan data ke database.
+    *
+    * @param    string   $tableName
+    * @param    string   $columnName
+    * @param    string   $value
+    * @return   string
+    *
+    */
+    public function insertProperty($tableName, $columnName, $value)
+    {
+        switch($this->dbConn)
+        {
+            default:
+                return "INSERT INTO $tableName ($columnName) VALUES ($value)";
+                break;
+        }
+    }
+
+    /**
+    ***************************************************************************
+    * Fungsi untuk membuat properti perbaruan data di database.
+    *
+    * @param    string   $tableName
+    * @param    string   $value
+    * @param    string   $whereClause
+    * @return   string
+    *
+    */
+    public function updateProperty($tableName, $value, $whereClause)
+    {
+        switch($this->dbConn)
+        {
+            default:
+                return "UPDATE $tableName SET $value WHERE $whereClause";
+                break;
+        }
+    }
+
+    /**
+    ***************************************************************************
+    * Fungsi untuk membuat properti menghapus data di database.
+    *
+    * @param    string   $tableName
+    * @param    string   $columnName
+    * @param    string   $value
+    * @return   string
+    *
+    */
+    public function deleteProperty($tableName, $whereClause, $all = FALSE)
+    {
+        switch($this->dbConn)
+        {
+            default:
+                return $all ? "DELETE FROM $tableName" : "DELETE FROM $tableName WHERE $whereClause";
+                break;
+        }
+    }
+
+    /**
+    ***************************************************************************
     * Fungsi untuk membuat properti proses mendapatkan data dari database.
     *
     * @param    string   $select
@@ -104,6 +164,10 @@ class DatabasePropertyController implements Property
         switch($this->dbConn)
         {
             default:
+                // $select = $select == '_R_ALL' ? $select = '*' : $select = $select;
+                // var_dump($clause);
+                // die;
+
                 return "SELECT $select FROM $tableName $clause";
                 break;
         }

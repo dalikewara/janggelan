@@ -16,11 +16,12 @@ class Debug
     private $debugConfig;
 
     /**
-    *
+    ***************************************************************************
     * Memanggil langsung fungsi 'controller()' dari Class 'DebugController'
     * untuk pengelolaan 'Debug' dan 'Error'.
     *
-    * @return   void
+    * @var      array   $this->debugConfig
+    * @return   mixed
     *
     */
     public function __construct()

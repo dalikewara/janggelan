@@ -37,6 +37,21 @@ class RequestController extends Request implements Caller, UrlChecker, Controlle
 
         extract($data);
 
+        // Janggelan selalu melakukan pengecekan apakah sistem menggunakan
+        // "protected_rule" atau tidak. Jika Anda menggunakan itu, Pengguna akan
+        // otomatis dialihkan dari halaman tujuan apabila pengguna tidak memiliki
+        // nilai atau data tokennya.
+        if(is_string($protected) AND !is_bool($protected))
+        {
+            $check = new \system\parents\Auth;
+
+            $check->protected($protected);
+        }
+
+        // Untuk pengguna yang lolos dari "protected_rule" akan diarahkan kembali
+        // ke halaman tujuan. Mungkin beberapa "Request" dari pengguna akan mengirimkan
+        // data-data. Data tersebut bisa ditangkap dengan index parameter di fungsi
+        // pada "Controller"nya.
         if(!empty($dataArgs))
         {
             return call_user_func_array([$object, $method], $dataArgs);
@@ -67,6 +82,9 @@ class RequestController extends Request implements Caller, UrlChecker, Controlle
             $validUrl  = $returnUrl[0];
             $dataArgs  = $returnUrl[1];
 
+            // Mengecek "protected_rule"
+            $protected = end($data[$validUrl]);
+
             // Args
             $args = explode('|', $data[$validUrl][1]);
 
@@ -92,7 +110,10 @@ class RequestController extends Request implements Caller, UrlChecker, Controlle
                 $this->methodChecker($object, $controllerMethod, $controller);
 
                 // Memanggil Controller
-                $callerData = ['object' => $object, 'method' => $controllerMethod, 'dataArgs' => $dataArgs];
+                $callerData = [
+                    'object' => $object, 'method' => $controllerMethod, 'dataArgs' => $dataArgs,
+                    'protected' => $protected
+                ];
 
                 $this->caller($callerData);
             }

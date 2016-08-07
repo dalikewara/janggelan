@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 /**
 * Janggelan: Hanya Sebuah Framework PHP Yang Tidak Terduga
 *******************************************************************************
@@ -9,9 +11,9 @@
 */
 //
 // Mengatur 'debug' dan 'error reporting' -------------------------------------
-$debug=new \system\parents\Debug;
+$debug = new \system\parents\Debug;
 // Meminta 'Request' ----------------------------------------------------------
-$request=new \system\parents\Request;$request->get();
+$request = new \system\parents\Request;$request->get();
 // Menghubungkan 'Request' ----------------------------------------------------
-$bridge=new \system\parents\Bridge;
+$bridge = new \system\parents\Bridge;
 // ----------------------------------------------------------------------------

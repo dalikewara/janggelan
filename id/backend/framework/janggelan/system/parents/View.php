@@ -10,7 +10,7 @@
 class View
 {
     /**
-    *
+    ***************************************************************************
     * Memanggil langsung fungsi 'controller()' dari Class 'ViewController'
     * untuk pengelolaan permintaan (View).
     *
