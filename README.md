@@ -36,20 +36,11 @@ lain-lain akan segera menyusul.
 
 - dan fitur-fitur lain.
 
-<<<<<<< HEAD:readme.md
 ### Kebutuhan Sistem
-
-- PHP > 5.4.
-- Extensi PHP PDO
-
-### Author
-=======
-## Kebutuhan Sistem
 - PHP > 5.4.
 - Extensi PHP PDO.
 
-## Author
->>>>>>> 8e3f4b8428f046f8f9ffa1910c6c117390aa5315:README.md
+### Author
 
 Dali Kewara <dalikewara@windowslive.com>
 
