@@ -5,19 +5,10 @@
 | Universal SQL Generator (Optional)
 |--------------------------------------------------------------------------
 |
-| Class ini akan membantu Anda untuk mendapatkan string query dari beberapa
-| jenis koneksi Database. Secara umum, Janggelan hanya meggunakan sejumlah
-| fungsi query yang bersifat tidak spesifik. Fungsi-fungsi query di Janggelan
-| untuk seleksi data adalah Select(), Clause(), BindParam(), Range(), dan Result().
-| Proses logika query dilakukan di dalam fungsi "Clause()", yang mana mungkin
-| Anda harus memasukkan query sesuai dengan Database yang Anda gunakan, entah itu
-| Mysql, Sqlite, dll. Jika Anda membangun aplikasi atau website yang mendukung
-| koneksi Database secara universal, agar Anda bisa menghasilkan query yang
-| bersifat universal ke dalam fungsi "Clause()", maka Anda bisa menggunakan
-| fungsi-fungsi di dalam Class ini.
+| This class will help you to get a string of the query functions from different
+| Databases.
 |
-| Jika diperlukan, Anda bisa mengedit atau menambahkan script generator Anda
-| sendiri sesuai kebutuhan.
+| If needed, you can edit or add your own SQL generator script.
 |
 */
 class SQLGenerator extends \system\parents\Controller
@@ -26,13 +17,13 @@ class SQLGenerator extends \system\parents\Controller
     * @author   Dali Kewara   <dalikewara@windowslive.com>
     */
 
-    // Variable ini mengindikasikan jenis koneksi Database yang Anda gunakan
-    // saat ini.
+    // This variable is indicated what kind of Database connection
+    // you are using now.
     private $connection;
 
     public function __construct()
     {
-        // Mendapatkan nama koneksi
+        // Get connection name
         $this->connection = Parent::GET_CONNECTION();
     }
 
@@ -56,6 +47,7 @@ class SQLGenerator extends \system\parents\Controller
 
         switch($this->connection)
         {
+            // Default is 'mysql'
             default:
                 return "{$type} {$column}{$operator}{$value} ";
                 break;
@@ -78,6 +70,7 @@ class SQLGenerator extends \system\parents\Controller
 
         switch($this->connection)
         {
+            // Default is 'mysql'
             default:
                 return "WHERE {$clause} ";
                 break;
@@ -108,6 +101,7 @@ class SQLGenerator extends \system\parents\Controller
 
         switch($this->connection)
         {
+            // Default is 'mysql'
             default:
                 return "WHERE {$column} IN ({$value}) ";
                 break;
@@ -129,6 +123,7 @@ class SQLGenerator extends \system\parents\Controller
     {
         switch($this->connection)
         {
+            // Default is 'mysql'
             default:
                 return "ORDER BY $by $order ";
                 break;
