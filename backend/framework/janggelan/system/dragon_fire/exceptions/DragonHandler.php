@@ -8,16 +8,24 @@
 */
 class DragonHandler extends \Exception
 {
+    use \register\paths;
+
     /**
     *
     * Fungsi ini memanggil template 'Dragon' yang digunakan untuk
     * menampilkan hasil Exception.
     *
+    * @var      array   $debugConfig
     * @return   mixed
     *
     */
    public function getError()
    {
-      require_once __DIR__ . '/../templates/Dragon.php';
+       $debugConfig = require($this->getPath()['config'] . '/debug.php');
+
+       if($debugConfig['display_errors'] == TRUE)
+       {
+           require_once __DIR__ . '/../templates/Dragon.php';
+       }
    }
 }

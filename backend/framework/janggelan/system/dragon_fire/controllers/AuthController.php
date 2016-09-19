@@ -55,15 +55,15 @@ class AuthController
             {
                 if($controller)
                 {
-                    Throw new DragonHandler("index '$index' dari <i>protected_rule</i> tidak ditemukan.");
+                    Throw new DragonHandler('index\''.$index.'\' dari <i>protected_rule</i> tidak ditemukan.');
                 }
 
                 return FALSE;
             }
 
             $controller = $controller ? $data[$index]['on_false'] : $controller;
-            $getPath    = $this->getPath();
-            $false      = function() use($controller, $getPath)
+            $getPath = $this->getPath();
+            $false = function() use($controller, $getPath)
             {
                 if($controller)
                 {
@@ -75,11 +75,11 @@ class AuthController
                     }
                     else
                     {
-                        $request    = new \system\dragon_fire\controllers\RequestController;
+                        $request = new \system\dragon_fire\controllers\RequestController;
                         $controller = explode('::', $controller);
-                        $method     = end($controller);
+                        $method = end($controller);
                         $controller = reset($controller);
-                        $object     = $request->controllerChecker($getPath['controller'],
+                        $object = $request->controllerChecker($getPath['controller'],
                             $controller, $this->getNamespace()['controller'], 'PROTECTED RULE: ');
 
                         $request->methodChecker($object, $method, $controller, 'PROTECTED RULE: ');
@@ -103,12 +103,7 @@ class AuthController
         }
         catch(DragonHandler $e)
         {
-            $debugConfig = require($this->getPath()['config'] . '/debug.php');
-
-            if($debugConfig['display_errors'] == TRUE)
-            {
-                die($e->getError());
-            }
+            die($e->getError());
         }
     }
 }

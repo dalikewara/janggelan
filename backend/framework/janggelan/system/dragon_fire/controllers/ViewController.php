@@ -29,7 +29,7 @@ class ViewController extends Request implements Caller, FileChecker
     {
         if(!is_array($data))
         {
-            Throw new DragonHandler("Data 'Caller' harus berupa array!");
+            Throw new DragonHandler('Data \'Caller\' harus berupa array!');
         }
 
         extract($data);
@@ -52,19 +52,15 @@ class ViewController extends Request implements Caller, FileChecker
         try
         {
             $viewPath = $this->fileExists('view', $request, $protected);
-
             // Calling the view
-            $callerData = ['object' => '\system\dragon_fire\templates\View', 'path' => $viewPath, 'compactData' => $data];
+            $callerData = ['object' => '\system\dragon_fire\templates\View',
+                'path' => $viewPath, 'compactData' => $data];
+
             $this->caller($callerData);
         }
         catch(DragonHandler $e)
         {
-            $debugConfig = require($this->getPath()['config'] . '/debug.php');
-
-            if($debugConfig['display_errors'] == TRUE)
-            {
-                die($e->getError());
-            }
+            die($e->getError());
         }
     }
 
@@ -92,22 +88,22 @@ class ViewController extends Request implements Caller, FileChecker
         }
         else
         {
-            $fileName = '/' . $fileName;
-            $filePhp  = '.php';
+            $fileName = '/'.$fileName;
+            $filePhp = '.php';
             $fileHTML = '.html';
         }
 
-        if(file_exists($return = $this->getPath()[$filePath] . "{$fileName}{$filePhp}"))
+        if(file_exists($return = $this->getPath()[$filePath].$fileName.$filePhp))
         {
             return $return;
         }
-        elseif(file_exists($return = $this->getPath()[$filePath] . "{$fileName}{$fileHTML}"))
+        elseif(file_exists($return = $this->getPath()[$filePath].$fileName.$fileHTML))
         {
             return $return;
         }
         else
         {
-            Throw new DragonHandler("<b>$protected</b> View <b>'$fileName'</b> tidak ditemukan.");
+            Throw new DragonHandler('<b>'.$protected.'</b> View <b>\''.$fileName.'\'</b> tidak ditemukan.');
         }
     }
 }

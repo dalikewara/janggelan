@@ -14,28 +14,7 @@ trait Validate
     */
     public function VALIDATE_SQL_DATA($data)
     {
-        $isData     = is_string($data) OR is_int($data) ? TRUE : FALSE;
-        $validData  = $isData == TRUE ? $validData = addslashes($data) : FALSE;
-        $returnData = $validData != FALSE ? $validData : FALSE;
-
-        return $returnData;
+        return (is_string($data) OR is_int($data)) ? ($validData =
+            addslashes($data)) : FALSE;
     }
-
-    // Sedang dalam proses
-    // /**
-    // ***************************************************************************
-    // *
-    // *
-    // * @param    string    $data
-    // * @return   array
-    // *
-    // */
-    // public function VALIDATE_CLAUSE_DATA($data)
-    // {
-    //     $isData     = is_string($data) OR is_int($data) ? TRUE : FALSE;
-    //     $validData  = $isData == TRUE ? $validData = addslashes($data) : FALSE;
-    //     $returnData = $validData != FALSE ? $validData : FALSE;
-    //
-    //     return $returnData;
-    // }
 }

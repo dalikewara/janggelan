@@ -6,6 +6,7 @@ use system\dragon_fire\interfaces\checker\Controller as ControllerChecker;
 use system\dragon_fire\interfaces\checker\Method as MethodChecker;
 use system\dragon_fire\interfaces\support\Caller;
 use system\dragon_fire\exceptions\DragonHandler;
+use system\dragon_fire\artists\Message;
 
 /*
 ||***************************************************************************||
@@ -17,6 +18,13 @@ use system\dragon_fire\exceptions\DragonHandler;
 class RequestController extends Request implements Caller, UrlChecker, ControllerChecker, MethodChecker
 {
     use \register\paths, \register\namespaces;
+
+    private $messages;
+
+    public function __construct()
+    {
+        $this->messages = new Message;
+    }
 
     /**
     ***************************************************************************
@@ -32,7 +40,7 @@ class RequestController extends Request implements Caller, UrlChecker, Controlle
     {
         if(!is_array($data))
         {
-            Throw new DragonHandler("Data 'Caller' harus berupa array!");
+            Throw new DragonHandler($this->messages->dataMustArray('Caller'));
         }
 
         extract($data);
@@ -76,15 +84,12 @@ class RequestController extends Request implements Caller, UrlChecker, Controlle
         try
         {
             $url = explode('?', $_SERVER['REQUEST_URI'])[0];
-
             // Mengecek url
             $returnUrl = $this->urlChecker($url, $_SERVER['REQUEST_METHOD'], $data);
-            $validUrl  = $returnUrl[0];
-            $dataArgs  = $returnUrl[1];
-
+            $validUrl = $returnUrl[0];
+            $dataArgs = $returnUrl[1];
             // Mengecek "protected_rule"
             $protected = end($data[$validUrl]);
-
             // Args
             $args = explode('|', $data[$validUrl][1]);
 
@@ -101,9 +106,8 @@ class RequestController extends Request implements Caller, UrlChecker, Controlle
                 // Mengecek 'Controller'
                 $controller = explode(':', reset($args));
                 $controller = end($controller);
-                $object     = $this->controllerChecker($this->getPath()['controller'],
+                $object = $this->controllerChecker($this->getPath()['controller'],
                     $controller, $this->getNamespace()['controller']);
-
                 // Mengecek 'Controller Method'
                 $controllerMethod = explode(':', end($args));
                 $controllerMethod = preg_replace('/[\n]/', '', end($controllerMethod));
@@ -121,12 +125,7 @@ class RequestController extends Request implements Caller, UrlChecker, Controlle
         }
         catch(DragonHandler $e)
         {
-            $debugConfig = require($this->getPath()['config'] . '/debug.php');
-
-            if($debugConfig['display_errors'] == TRUE)
-            {
-                die($e->getError());
-            }
+            die($e->getError());
         }
     }
 
@@ -158,10 +157,10 @@ class RequestController extends Request implements Caller, UrlChecker, Controlle
         }
 
         // Deklarasi variabel pengecekan
-        $x           = 0;
-        $finalUrl    = '';
-        $dataArgs    = NULL;
-        $urlData     = array_values(array_filter(explode('/', $url)));
+        $x = 0;
+        $finalUrl = '';
+        $dataArgs = NULL;
+        $urlData = array_values(array_filter(explode('/', $url)));
         $requestData = array_keys($array);
 
         // Proses pengecekan url dan data
@@ -184,7 +183,7 @@ class RequestController extends Request implements Caller, UrlChecker, Controlle
                 }
             }
 
-            $requestExplode        = array_filter($requestExplode);
+            $requestExplode = array_filter($requestExplode);
             $requestIndexesCompare = array_diff_assoc($requestExplode, $urlData);
 
             if((count($requestIndexesCompare) == 0) AND (count($urlData) == $requestCount))
@@ -205,10 +204,10 @@ class RequestController extends Request implements Caller, UrlChecker, Controlle
 
         // Pengecekan url tahap akhir
         !isset($array[$finalUrl]) ? ($this->generateRedirect('route',
-            "Permintaan gagal, url <b>'$url'</b> belum terdaftar!")) : TRUE;
+            $this->messages->uriNotRegistered($url))) : TRUE;
         // Pengecekan Method dari Request
         ($method != $array[$finalUrl][0]) ? ($this->generateRedirect('requestMethod',
-            "'Method Request' tidak diperbolehkan!")) : TRUE;
+            $this->messages->methodRequestNotAllowed())) : TRUE;
 
         // Mengembalikan url yang valid dalam bentuk string
         return [$finalUrl, $dataArgs];
@@ -231,16 +230,15 @@ class RequestController extends Request implements Caller, UrlChecker, Controlle
     */
     public function controllerChecker($path, $name, $namespace, $protected = '')
     {
-        !file_exists($path . '/' . str_replace('\\', '/', $name) . '.php') ? (
-            $this->generateRedirect('controller', "<b>$protected</b> Controller
-            <b>'$name'</b> tidak ditemukan.")) : TRUE;
+        !file_exists($path.'/'.str_replace('\\', '/', $name).'.php') ? (
+            $this->generateRedirect('controller',
+            $this->messages->controllerDoesntExists($protected, $name))) : TRUE;
 
         // Deklarasi variabel untuk pembuatan objek
-        $object = $namespace . "\\$name";
+        $object = $namespace.'\\'.$name;
 
         !class_exists($object) ? ($this->generateRedirect('controller',
-            "<b>$protected</b> Namespace atau kelas <b>'$namespace\\$name'</b>
-            tidak ditemukan.")) : TRUE;
+            $this->messages->wrongController($protected, $namespace, $name))) : TRUE;
 
         // Mengembalikan nilai berupa objek dari Controller yang valid
         return new $object;
@@ -264,8 +262,7 @@ class RequestController extends Request implements Caller, UrlChecker, Controlle
     public function methodChecker($objectClass, $method, $className, $protected = '')
     {
         !method_exists($objectClass, $method) ? ($this->generateRedirect('controller',
-            "<b>$protected</b> Method <b>'$method'</b> tidak ditemukan di Controller
-            <b>'$className'</b>.")) : TRUE;
+            $this->messages->methodDoesntExists($protected, $method, $className))) : TRUE;
     }
 
     /**
@@ -275,7 +272,6 @@ class RequestController extends Request implements Caller, UrlChecker, Controlle
     *
     * @param    string   $index
     * @param    string   $message
-    * @param    string   $protected
     * @return   mixed
     *
     * @throws   \system\dragon_fire\exceptions\DragonHandler
@@ -283,7 +279,7 @@ class RequestController extends Request implements Caller, UrlChecker, Controlle
     */
     public function generateRedirect($index, $message = '')
     {
-        $config = require($this->getPath()['config'] . '/request.php');
+        $config = require($this->getPath()['config'].'/request.php');
         $config = isset($config['redirect_on_false'][$index]) ?
             $config['redirect_on_false'][$index] : 'default';
         $throw = function() use($message)
@@ -291,7 +287,7 @@ class RequestController extends Request implements Caller, UrlChecker, Controlle
             Throw new DragonHandler($message);
         };
 
-        ($config === 'default') ? $throw() : (header("location: {$config}"));
+        ($config === 'default') ? $throw() : (header('location: '.$config));
         die;
     }
 }

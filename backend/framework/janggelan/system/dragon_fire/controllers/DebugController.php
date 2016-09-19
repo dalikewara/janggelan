@@ -25,7 +25,7 @@ class DebugController
     {
         if(!is_array($debugConfig))
         {
-            Throw new DragonHandler("Data konfigurasi 'config/debug.php' harus berupa array!");
+            Throw new DragonHandler('Data konfigurasi \'config/debug.php\' harus berupa array!');
         }
 
         ini_set('display_errors', $debugConfig['display_errors']);

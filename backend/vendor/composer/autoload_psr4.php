@@ -6,8 +6,14 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'vendor\\' => array($vendorDir . ''),
     'system\\' => array($baseDir . '/framework/janggelan/system'),
     'register\\' => array($baseDir . '/register'),
-    'mvc\\' => array($baseDir . '/mvc'),
+    'provider\\' => array($baseDir . '/../worksheet/providers'),
+    'phpssdb\\' => array($vendorDir . '/phpfastcache/phpssdb/src/phpssdb'),
+    'phpFastCache\\' => array($vendorDir . '/phpfastcache/phpfastcache/src/phpFastCache'),
+    'mvc\\' => array($baseDir . '/../worksheet'),
     'config\\' => array($baseDir . '/config'),
+    'Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
+    'Predis\\' => array($vendorDir . '/predis/predis/src'),
 );

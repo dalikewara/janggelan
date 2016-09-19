@@ -28,14 +28,14 @@ class DatabasePropertyController implements Property
         // namun belum melakukan proses pembersihan data untuk keamanan.
         // Di sini, data tersebut akan di validasi untuk meencegah hal-hal yang tidak
         // diinginkan.
-        $this->properties  = new DatabaseDataController;
-        $this->properties  = $this->properties->data();
+        $this->properties = new DatabaseDataController;
+        $this->properties = $this->properties->data();
         $this->autoConnect = $this->properties['AUTO_CONNECT'];
-        $this->dbHost      = $this->VALIDATE_SQL_DATA($this->properties['DB_HOST']);
-        $this->dbName      = $this->VALIDATE_SQL_DATA($this->properties['DB_NAME']);
-        $this->dbUsername  = $this->VALIDATE_SQL_DATA($this->properties['DB_USERNAME']);
-        $this->dbPassword  = $this->VALIDATE_SQL_DATA($this->properties['DB_PASSWORD']);
-        $this->dbConn      = $this->VALIDATE_SQL_DATA($this->properties['DB_DEFAULT_CONNECTION']);
+        $this->dbHost = $this->VALIDATE_SQL_DATA($this->properties['DB_HOST']);
+        $this->dbName = $this->VALIDATE_SQL_DATA($this->properties['DB_NAME']);
+        $this->dbUsername = $this->VALIDATE_SQL_DATA($this->properties['DB_USERNAME']);
+        $this->dbPassword = $this->VALIDATE_SQL_DATA($this->properties['DB_PASSWORD']);
+        $this->dbConn = $this->VALIDATE_SQL_DATA($this->properties['DB_DEFAULT_CONNECTION']);
     }
 
     /**
@@ -47,7 +47,8 @@ class DatabasePropertyController implements Property
     */
     public function autoConnect()
     {
-        $this->autoConnect = !is_bool($this->autoConnect) ? FALSE : $this->autoConnect = $this->autoConnect;
+        $this->autoConnect = !is_bool($this->autoConnect) ? FALSE :
+            $this->autoConnect = $this->autoConnect;
 
         return $this->autoConnect;
     }
@@ -64,8 +65,8 @@ class DatabasePropertyController implements Property
         switch($this->dbConn)
         {
             default:
-                return new \PDO("$this->dbConn:host=$this->dbHost;dbname=$this->dbName",
-                                 $this->dbUsername, $this->dbPassword);
+                return new \PDO($this->dbConn.':host='.$this->dbHost.
+                    ';dbname='.$this->dbName,$this->dbUsername, $this->dbPassword);
                 break;
         }
     }
@@ -84,7 +85,7 @@ class DatabasePropertyController implements Property
         switch($this->dbConn)
         {
             default:
-                return "CREATE TABLE IF NOT EXISTS $tableName ($data)";
+                return 'CREATE TABLE IF NOT EXISTS '.$tableName.' ('.$data.')';
                 break;
         }
     }
@@ -104,7 +105,7 @@ class DatabasePropertyController implements Property
         switch($this->dbConn)
         {
             default:
-                return "INSERT INTO $tableName ($columnName) VALUES ($value)";
+                return 'INSERT INTO '.$tableName.' ('.$columnName.') VALUES ('.$value.')';
                 break;
         }
     }
@@ -124,7 +125,7 @@ class DatabasePropertyController implements Property
         switch($this->dbConn)
         {
             default:
-                return "UPDATE $tableName SET $value WHERE $whereClause";
+                return 'UPDATE '.$tableName.' SET '.$value.' WHERE '.$whereClause;
                 break;
         }
     }
@@ -144,7 +145,8 @@ class DatabasePropertyController implements Property
         switch($this->dbConn)
         {
             default:
-                return $all ? "DELETE FROM $tableName" : "DELETE FROM $tableName WHERE $whereClause";
+                return $all ? 'DELETE FROM '.$tableName : 'DELETE FROM '.
+                    $tableName.' WHERE '.$whereClause;
                 break;
         }
     }
@@ -165,11 +167,7 @@ class DatabasePropertyController implements Property
         switch($this->dbConn)
         {
             default:
-                // $select = $select == '_R_ALL' ? $select = '*' : $select = $select;
-                // var_dump($clause);
-                // die;
-
-                return "SELECT $select FROM $tableName $clause $range";
+                return 'SELECT '.$select.' FROM '.$tableName.' '.$clause.' '.$range;
                 break;
         }
     }
@@ -188,7 +186,7 @@ class DatabasePropertyController implements Property
         switch($this->dbConn)
         {
             default:
-                return "LIMIT $take OFFSET $skip";
+                return 'LIMIT '.$take.' OFFSET '.$skip;
                 break;
         }
     }

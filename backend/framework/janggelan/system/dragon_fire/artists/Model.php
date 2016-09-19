@@ -41,7 +41,7 @@ class Model extends Blueprint
             }
             catch(\PDOException $e)
             {
-                die('Connection failed! ' . $e->getMessage() . '<br>' . $e->getLine());
+                die('Connection failed! '.$e->getMessage().'<br>'.$e->getLine());
             }
         }
         else
@@ -63,17 +63,17 @@ class Model extends Blueprint
     {
         $this->Open();
 
-        $dbProperties     = new DatabasePropertyController;
+        $dbProperties = new DatabasePropertyController;
         $tableInformation = static::tableInformation();
-        $smartTable       = key($tableInformation);
-        $smartColumn      = array_keys(current($tableInformation));
-        $defaultColumn    = current($tableInformation);
-        $createData       = '';
-        $x                = 0;
+        $smartTable = key($tableInformation);
+        $smartColumn = array_keys(current($tableInformation));
+        $defaultColumn = current($tableInformation);
+        $createData = '';
+        $x = 0;
 
         foreach($defaultColumn as $defColumn)
         {
-            $createData .= ' ' . $smartColumn[$x] . ' ' . $defColumn . ',';
+            $createData .= ' '.$smartColumn[$x].' '.$defColumn.',';
 
             $x++;
         }
@@ -98,16 +98,15 @@ class Model extends Blueprint
         $this->Open();
 
         $tableInformation = static::tableInformation();
-        $smartTable       = key($tableInformation);
-        $dbProperties     = new DatabasePropertyController;
-        $data             = is_array($data) ? $data : array();
-        $columnName       = implode(', ', array_keys($data));
-        $value            = implode(", ", array_keys(array_combine(array_map(
-            function($a){return ":$a";},array_keys($data)), array_values($data))));
+        $smartTable = key($tableInformation);
+        $dbProperties = new DatabasePropertyController;
+        $data = is_array($data) ? $data : array();
+        $columnName = implode(', ', array_keys($data));
+        $value = implode(', ', array_keys(array_combine(array_map(
+            function($a){return ':'.$a;},array_keys($data)), array_values($data))));
         $bindParams = $data;
-        $prepare    = $this->dbConnect->prepare(
-            $dbProperties->insertProperty($smartTable, $columnName, $value)
-        );
+        $prepare = $this->dbConnect->prepare(
+            $dbProperties->insertProperty($smartTable, $columnName, $value));
 
         $prepare->execute($bindParams);
         $this->Die();
@@ -128,17 +127,17 @@ class Model extends Blueprint
         $this->Open();
 
         $tableInformation = static::tableInformation();
-        $smartTable       = key($tableInformation);
-        $dbProperties     = new DatabasePropertyController;
-        $value            = is_array($value) ? $value : array();
-        $clause           = is_array($clause) ? $clause : array();
-        $paramValue       = array_combine(array_map(function($a){return "{$a}value";},
+        $smartTable = key($tableInformation);
+        $dbProperties = new DatabasePropertyController;
+        $value = is_array($value) ? $value : array();
+        $clause = is_array($clause) ? $clause : array();
+        $paramValue = array_combine(array_map(function($a){return $a.'value';},
             array_keys($value)), array_values($value));
-        $paramClause = array_combine(array_map(function($a){return "{$a}clause";},
+        $paramClause = array_combine(array_map(function($a){return $a.'clause';},
             array_keys($clause)), array_values($clause));
-        $value = array_combine(array_map(function($a){return "$a=:{$a}value";},
+        $value = array_combine(array_map(function($a){return $a.'=:'.$a.'value';},
             array_keys($value)), array_values($value));
-        $clause = array_combine(array_map(function($a){return "$a=:{$a}clause";},
+        $clause = array_combine(array_map(function($a){return $a.'=:'.$a.'clause';},
             array_keys($clause)), array_values($clause));
         $prepareValue = implode(', ', array_keys($value));
         $prepareClause = implode(' AND ', array_keys($clause));
@@ -164,26 +163,24 @@ class Model extends Blueprint
     {
         $this->Open();
 
-        $dbProperties     = new DatabasePropertyController;
+        $dbProperties = new DatabasePropertyController;
         $tableInformation = static::tableInformation();
-        $smartTable       = key($tableInformation);
-        $data             = is_array($data) ? $data : array();
+        $smartTable = key($tableInformation);
+        $data = is_array($data) ? $data : array();
 
         if(count($data) > 0)
         {
-            $value = implode(" AND ", array_keys(array_combine(array_map(
-                function($a){return "$a=:$a";},array_keys($data)), array_values($data))));
+            $value = implode(' AND ', array_keys(array_combine(array_map(
+                function($a){return $a.'=:'.$a;},array_keys($data)), array_values($data))));
             $prepare = $this->dbConnect->prepare(
-                $dbProperties->deleteProperty($smartTable, $value)
-            );
+                $dbProperties->deleteProperty($smartTable, $value));
 
             $prepare->execute($data);
         }
         else
         {
             $this->dbConnect->exec(
-                $dbProperties->deleteProperty($smartTable, '', TRUE)
-            );
+                $dbProperties->deleteProperty($smartTable, '', TRUE));
         }
 
         $this->Die();
@@ -202,12 +199,12 @@ class Model extends Blueprint
     {
         $this->Open();
 
-        $dbProperties     = new DatabasePropertyController;
+        $dbProperties = new DatabasePropertyController;
         $tableInformation = static::tableInformation();
-        $smartTable       = key($tableInformation);
-        $smartColumn      = array_keys(current($tableInformation));
-        $x                = 0;
-
+        $smartTable = key($tableInformation);
+        $smartColumn = array_keys(current($tableInformation));
+        $x = 0;
+        
         // Di bawah ini merupakan proses untuk membuat properti metode query 'SELECT'.
         // Data properti yang diproses tersebut berasal dari fungsi 'Select()'.
         if($this->artistModelSelect != '*')
@@ -215,32 +212,26 @@ class Model extends Blueprint
             // Variabel 'boolAMS (Boolean Artist Model Select)' digunakan sebagai index
             // apakah ada data yang diseleksi atau tidak. Jika tidak ada, maka fungsi ini
             // akan menampilkan semua data secara 'Default'.
-            $boolAMS         = FALSE;
+            $boolAMS = FALSE;
             $columnNameIndex = explode(' ', $this->artistModelSelect);
 
-            if(isset($columnNameIndex[1]))
-            {
-                $columnNameIndex = explode(',', $columnNameIndex[1]);
-            }
-            else
-            {
-                $columnNameIndex = explode(',', $columnNameIndex[0]);
-            }
+            isset($columnNameIndex[1]) ? ($columnNameIndex = explode(',',
+                $columnNameIndex[1])) : ($columnNameIndex = explode(',',
+                $columnNameIndex[0]));
 
             $totalColumn = count($columnNameIndex);
         }
         else
         {
-            $boolAMS         = TRUE;
+            $boolAMS = TRUE;
             $columnNameIndex = $smartColumn;
-            $totalColumn     = count($smartColumn);
+            $totalColumn = count($smartColumn);
         }
-
         // Di sini adalah proses untuk meminta data ke Database berdasarkan data
         // yang ada. Proses pemisahan seleksi 'Clause' berlangsung disini, apakah
         // akan menggunakan fungsi 'prepare()' atau tidak.
         $prepare = $dbProperties->selectProperty($this->artistModelSelect,
-                   $smartTable, $this->artistModelClause, $this->artistModelRange);
+            $smartTable, $this->artistModelClause, $this->artistModelRange);
 
         if(preg_match('/[:][a-zA-Z0-9]*/', $this->artistModelClause))
         {
@@ -252,7 +243,6 @@ class Model extends Blueprint
         {
             $result = $this->dbConnect->query($prepare);
         }
-
         // Data yang telah diminta akan dikumpulkan di sini dan dikemas untuk
         // ditampilkan.
         if($result->rowCount() > 0)
@@ -261,14 +251,9 @@ class Model extends Blueprint
             {
                 for($i = 0; $i < $totalColumn; $i++)
                 {
-                    if($boolAMS)
-                    {
-                        $array[$x][$columnNameIndex[$i]] = $row[$columnNameIndex[$i]];
-                    }
-                    else
-                    {
-                        $array[$x] = $row[$columnNameIndex[$i]];
-                    }
+                    $boolAMS ? ($array[$x][$columnNameIndex[$i]] =
+                        $row[$columnNameIndex[$i]]) : ($array[$x] =
+                        $row[$columnNameIndex[$i]]);
                 }
 
                 $x++;
@@ -296,7 +281,7 @@ class Model extends Blueprint
     {
         // Data seleksi 'Select()' akan ditampung di dalam variabel ini.
         // Kami juga melakukan validasi terhadap data yang masuk.
-        $column                  = is_string($column) ? $column : '';
+        $column = is_string($column) ? $column : '';
         $this->artistModelSelect = $this->VALIDATE_SQL_DATA($column);
 
         return $this;
@@ -319,7 +304,7 @@ class Model extends Blueprint
     {
         // Data seleksi 'Clause()' akan ditampung di dalam variabel ini.
         // Kami juga melakukan validasi terhadap data yang masuk.
-        $value                   = is_string($value) ? $value : '';
+        $value = is_string($value) ? $value : '';
         $this->artistModelClause = $value;
 
         return $this;
@@ -342,7 +327,7 @@ class Model extends Blueprint
     {
         // Data properti 'BindParam()' akan ditampung di dalam variabel ini.
         // Kami juga melakukan validasi terhadap data yang masuk.
-        $array                  = is_array($array) ? $array : array();
+        $array = is_array($array) ? $array : array();
         $this->artistModelParam = $array;
 
         return $this;
@@ -361,7 +346,7 @@ class Model extends Blueprint
     public function Range($take, $skip = 0)
     {
         $dbProperties = new DatabasePropertyController;
-        $take         = is_int($take) ? $take : (preg_match('/[0-9]*/',
+        $take = is_int($take) ? $take : (preg_match('/[0-9]*/',
             $take) ? $take : 0);
         $skip = is_int($skip) ? $skip : (preg_match('/[0-9]*/',
             $skip) ? $skip : 0);
@@ -386,65 +371,15 @@ class Model extends Blueprint
         // Disini akan memanggil fungsi 'All()' untuk menampilkan data
         // yang diminta.
         $result = $this->All();
-
         // Nilai-nilai dari variabel 'Artist Model' yang telah berubah akan
         // dikembalikan ke nilai defaultnya.
         $this->artistModelSelect = $this->artistModelSelectDef;
         $this->artistModelClause = $this->artistModelClauseDef;
-        $this->artistModelParam  = $this->artistModelParamDef;
-        $this->artistModelRange  = $this->artistModelRangeDef;
+        $this->artistModelParam = $this->artistModelParamDef;
+        $this->artistModelRange = $this->artistModelRangeDef;
 
         return $result;
     }
-
-    // Sedang dalam proses
-    /**
-    ***************************************************************************
-    *
-    * @param    array   $tableName
-    * @param    array   $index
-    * @return   array
-    *
-    */
-    // public function Relation($tableName, $index)
-    // {
-    //     try
-    //     {
-    //         if(((!is_array($tableName) AND !is_array($index)) AND (empty($tableName) AND
-    //              empty($index))) OR (count($tableName) + 1) != count($index))
-    //         {
-    //             Throw new DragonHandler("Parameter dari fungsi 'Relation()' salah. Silahkan periksa kembali.");
-    //         }
-    //
-    //         $clause = NULL;
-    //         $select = '_R_ALL';
-    //         $model  = explode('\\', get_called_class());
-    //         $model  = end($model);
-    //
-    //         array_unshift($tableName, $model);
-    //
-    //         $tableNameArray = $tableName;
-    //         $tableName      = implode(', ', $tableName);
-    //
-    //         for($i = 0; $i < count($index); $i++)
-    //         {
-    //             $clause .= $tableNameArray[$i] . "__$i@WITH__" . $index[$i] . ', ';
-    //         }
-    //
-    //         // Di sini adalah proses untuk meminta data ke Database berdasarkan data
-    //         // yang ada.
-    //         $prepare = $dbProperties->selectProperty($select, $tableName, $clause);
-    //     }
-    //     catch(DragonHandler $e)
-    //     {
-    //         $debugConfig = require($this->getPath()['config'] . '/debug.php');
-    //
-    //         if($debugConfig['display_errors'] == TRUE)
-    //         {
-    //             die($e->getError());
-    //         }
-    //     }
-    // }
 
     /**
     ***************************************************************************
@@ -453,8 +388,8 @@ class Model extends Blueprint
     * @return   mixed
     *
     */
-    public function Die()
+    public function Die($connection = FALSE)
     {
-        $this->dbConnect = NULL;
+        !$connection ? ($this->dbConnect = NULL) : ($connection = NULL);
     }
 }

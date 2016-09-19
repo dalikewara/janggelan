@@ -22,7 +22,7 @@ class Model extends Artist
         // akan berubah nilainya sesuai dengan tipe seleksi yang diinginkan.
         $this->artistModelSelectDef = $this->artistModelSelect = '*';
         $this->artistModelClauseDef = $this->artistModelClause = '';
-        $this->artistModelParamDef  = $this->artistModelParam  = [];
-        $this->artistModelRangeDef   = $this->artistModelRange = '';
+        $this->artistModelParamDef = $this->artistModelParam  = [];
+        $this->artistModelRangeDef = $this->artistModelRange = '';
     }
 }

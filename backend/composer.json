@@ -1,10 +1,15 @@
 {
     "autoload": {
         "psr-4": {
-            "mvc\\": "mvc",
+            "mvc\\": "../worksheet",
             "register\\": "register",
             "config\\": "config",
-            "system\\": "framework/janggelan/system"
+            "system\\": "framework/janggelan/system",
+            "provider\\": "../worksheet/providers",
+            "vendor\\": "vendor"
         }
+    },
+    "require": {
+        "phpFastCache/phpFastCache": "^5.0"
     }
 }

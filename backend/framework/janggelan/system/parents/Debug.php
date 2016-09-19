@@ -26,8 +26,8 @@ class Debug
     */
     public function __construct()
     {
-        $this->debugConfig = require_once($this->getPath()['config'] . '/debug.php');
-        $debugController   = new \system\dragon_fire\controllers\DebugController;
+        $this->debugConfig = require_once($this->getPath()['config'].'/debug.php');
+        $debugController = new \system\dragon_fire\controllers\DebugController;
 
         return $debugController->controller($this->debugConfig);
     }

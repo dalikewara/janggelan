@@ -1,32 +1,33 @@
 <?php
 
 /**
-* Janggelan: Hanya Sebuah Framework PHP Yang Tidak Terduga
+* Janggelan: Just An Unexpected PHP Framework
 *******************************************************************************
 *
 * @package   Janggelan
 * @author    Dali Kewara   <dalikewara@windowslive.com>
 */
-//
-// Mendapatkan konfigurasi "force uri" ----------------------------------------
-$force = fopen(__DIR__ . '/force.config', 'r'); $forceUri = preg_replace('/\s/', '',
-fgets($force)); fclose($force);
-// Penyaringan "FORCE URI"
+
+// Getting "FORCE URI" configuration
+$forceUri = preg_replace('/\s/', '', file_get_contents(__DIR__.'/force.config'));
+
+// Filtering "FORCE URI"
 if($forceUri == 'FORCEURI:NO')
 {
-    // Menyeleksi URI apakah sebuah folder atau tidak -------------------------
+    // Checking URI is it a folder or not
     $uri = ($_SERVER['REQUEST_URI'] !== '/' && file_exists(ltrim(urldecode(
         parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)), '/'))) ? FALSE : TRUE;
-    // Mengaktifkan fitur psr-4 / autoload dari composer jika $uri === TRUE ---
-    $uri ? require_once 'vendor/autoload.php' : FALSE;
-    // Memulai framework jika $uri === TRUE -----------------------------------
-    $uri ? require_once 'framework/janggelan/system/start.php' : FALSE;
+
+    // Activate Composer autoload/psr-4 feature and starting the framework
+    // if the $uri is TRUE
+    if($uri)
+    {
+        require_once 'vendor/autoload.php';
+        require_once 'framework/janggelan/system/start.php';
+    }
 }
 elseif($forceUri == 'FORCEURI:YES')
 {
-    // Mengaktifkan fitur psr-4 / autoload dari composer ----------------------
     require_once 'vendor/autoload.php';
-    // Memulai framework ------------------------------------------------------
     require_once 'framework/janggelan/system/start.php';
 }
-// ----------------------------------------------------------------------------

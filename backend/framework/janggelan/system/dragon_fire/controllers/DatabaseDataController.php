@@ -15,6 +15,15 @@ class DatabaseDataController implements DataFilter
 {
     use \register\paths;
 
+    private $finalSecretData;
+
+    public function __construct()
+    {
+        $this->finalSecretData = [];
+
+        $this->dbSecretController();
+    }
+
     /**
     ***************************************************************************
     * Memberikan data valid yang terstruktur agar mudah digunakan
@@ -29,24 +38,19 @@ class DatabaseDataController implements DataFilter
             extract($this->dataFilter($this->getData()));
 
             return [
-                'AUTO_CONNECT'          => $autoConnect,
-                'DB_COLLECTIONS'        => $collections,
+                'AUTO_CONNECT' => $autoConnect,
+                'DB_COLLECTIONS' => $collections,
                 'DB_DEFAULT_CONNECTION' => $defaultConnection,
-                'DB_HOST'               => $properties['DB_HOST'],
-                'DB_NAME'               => $properties['DB_NAME'],
-                'DB_USERNAME'           => $properties['DB_USERNAME'],
-                'DB_PASSWORD'           => $properties['DB_PASSWORD'],
-                'PDO_FETCH_STYLE'       => $pdoFetchStyle,
+                'DB_HOST' => $properties['DB_HOST'],
+                'DB_NAME' => $properties['DB_NAME'],
+                'DB_USERNAME' => $properties['DB_USERNAME'],
+                'DB_PASSWORD' => $properties['DB_PASSWORD'],
+                'PDO_FETCH_STYLE' => $pdoFetchStyle,
             ];
         }
         catch(DragonHandler $e)
         {
-            $debugConfig = require($this->getPath()['config'] . '/debug.php');
-
-            if($debugConfig['display_errors'] == TRUE)
-            {
-                die($e->getError());
-            }
+            die($e->getError());
         }
     }
 
@@ -61,9 +65,9 @@ class DatabaseDataController implements DataFilter
     */
     public function getData()
     {
-        if(!is_array($data = require($this->getPath()['config'] . '/database.php')))
+        if(!is_array($data = require($this->getPath()['config'].'/database.php')))
         {
-            Throw new DragonHandler("Data 'config/database.php' harus berupa array!");
+            Throw new DragonHandler('Data \'config/database.php\' harus berupa array!');
         }
 
         return $data;
@@ -80,10 +84,10 @@ class DatabaseDataController implements DataFilter
     public function dataFilter(array $data)
     {
         $defaultConnection = $data['default_connection'];
-        $pdoFetchStyle     = $data['pdo_fetch_style'];
-        $collections       = $data['connections'];
-        $autoConnect       = $data['auto_connect'];
-        $properties        = $collections[$defaultConnection];
+        $pdoFetchStyle = $data['pdo_fetch_style'];
+        $collections = $data['connections'];
+        $autoConnect = $data['auto_connect'];
+        $properties = $collections[$defaultConnection];
 
         is_string($defaultConnection) ? $defaultConnection = $defaultConnection : $defaultConnection = 'mysql';
         is_bool($autoConnect) ? $autoConnect = $autoConnect : $autoConnect = FALSE;
@@ -91,5 +95,24 @@ class DatabaseDataController implements DataFilter
         return compact(
             'defaultConnection', 'pdoFetchStyle', 'collections', 'properties', 'autoConnect'
         );
+    }
+
+    public function dbSecretController()
+    {
+        $secretData = rtrim(preg_replace('/\n/', '\n', file_get_contents(
+            $this->getPath()['backend'].'/.secrets/.db')), '\n');
+        $explodeData = explode('\n', $secretData);
+
+        foreach($explodeData as $exp)
+        {
+            $pre = explode(':', $exp);
+            $this->finalSecretData[$pre[0]] = $pre[1];
+        }
+    }
+
+    public function DB($index)
+    {
+        return isset($this->finalSecretData['DB_'.$index]) ?
+            $this->finalSecretData['DB_'.$index] : FALSE;
     }
 }

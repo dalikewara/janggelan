@@ -12,19 +12,21 @@ class Bridge
     // Berikut sengaja dibuat 'private' karena memang tidak boleh di akses
     // selain di dalam Class ini.
     private $getDataArray, $getUrlMethod, $getUrl, $getArgs, $getArgsArray,
-            $getArgsLeft, $getArgsRight;
+            $getArgsLeft, $getArgsRight, $requestsFile, $cacheFileName;
 
     /**
     ***************************************************************************
     * Di sini adalah proses pemisahan data dari file 'requests.uri' untuk
     * dikirim menuju Controllernya.
     *
-    * @return   void
+    * @return   mixed
     *
     */
     public function __construct()
     {
-        $open = fopen(__DIR__ . '/../dragon_fire/storages/uri/requests.uri', 'r');
+        $this->requestsFile = \register\paths::getPath()['root'].'/worksheet/requests.php';
+        $this->cacheFileName = str_replace(' ', '_', filemtime($this->requestsFile));
+        $open = fopen(__DIR__.'/../dragon_fire/storages/uri/'.$this->cacheFileName.'.uri', 'r');
 
         while(!feof($open))
         {
@@ -32,19 +34,18 @@ class Bridge
 
             if($data != NULL OR $data != '')
             {
-                $this->getDataArray           = explode(' ___ @_@ ___ ', $data);
-                $this->getUrlMethod           = ltrim(reset($this->getDataArray), 'METHOD=');
-                $this->getUrl                 = ltrim($this->getDataArray[1], 'URI=');
-                $this->getArgs                = ltrim($this->getDataArray[2], 'ARGS=');
-                $this->getProtected           = preg_match('/(:::)/', end($this->getDataArray)) ?
-                                                preg_replace('/(:::)[ \s]/', '',
-                                                ltrim(end($this->getDataArray), ':::')) : FALSE;
-                $this->getArgsArray           = explode(' ', $this->getArgs);
-                $this->getArgsLeft            = reset($this->getArgsArray);
-                $this->getArgsRight           = end($this->getArgsArray);
+                $this->getDataArray = explode(' ___ @_@ ___ ', $data);
+                $this->getUrlMethod = ltrim(reset($this->getDataArray), 'METHOD=');
+                $this->getUrl = ltrim($this->getDataArray[1], 'URI=');
+                $this->getArgs = ltrim($this->getDataArray[2], 'ARGS=');
+                $this->getProtected = preg_match('/(:::)/', end($this->getDataArray)) ?
+                    preg_replace('/(:::)[ \s]/', '', ltrim(end($this->getDataArray), ':::')) : FALSE;
+                $this->getArgsArray = explode(' ', $this->getArgs);
+                $this->getArgsLeft = reset($this->getArgsArray);
+                $this->getArgsRight = end($this->getArgsArray);
                 $this->getData[$this->getUrl] = [
                     $this->getUrlMethod,
-                    "$this->getArgsLeft|$this->getArgsRight",
+                    $this->getArgsLeft.'|'.$this->getArgsRight,
                     $this->getProtected
                 ];
             }

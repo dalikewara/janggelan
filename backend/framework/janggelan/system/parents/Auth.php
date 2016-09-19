@@ -1,5 +1,8 @@
 <?php namespace system\parents;
 
+use system\dragon_fire\abstractions\request\Request;
+use system\dragon_fire\interfaces\support\Auth as Blueprint;
+
 /*
 ||***************************************************************************||
 || Class untuk mendapatkan data konfigurasi dari 'config/auth.php'           ||
@@ -7,7 +10,7 @@
 ||***************************************************************************||
 ||
 */
-class Auth
+class Auth extends Request implements Blueprint
 {
     use \register\paths;
 
@@ -16,7 +19,6 @@ class Auth
     * Memanggil langsung fungsi 'controller()' dari Class 'AuthController'
     * untuk pengelolaan 'Auth' dan proteksi.
     *
-    * @var      array   $this->authConfig
     * @return   mixed
     *
     */
@@ -31,6 +33,7 @@ class Auth
     * menggunakan sistem 'AUTH protected_rule'.
     *
     * @param    string   $index
+    * @param    bool     $controller
     * @var      array    $this->authConfig
     * @return   mixed
     *
@@ -38,9 +41,25 @@ class Auth
     public function protected($index, $controller = TRUE)
     {
         $authController = new \system\dragon_fire\controllers\AuthController;
-        $data           = $this->authConfig()['protected_rule'];
+        $data = $this->authConfig()['protected_rule'];
 
         return $authController->protected($index, $data, $controller);
+    }
+
+    /**
+    ***************************************************************************
+    * Melakukan pengecekan proteksi secara langsung jika pada "Request"
+    * menggunakan sistem 'AUTH protected_rule'.
+    *
+    * @param    string   $index
+    * @param    bool     $controller
+    * @var      array    $this->authConfig
+    * @return   mixed
+    *
+    */
+    public function buildInAuth()
+    {
+        //
     }
 
     /**
@@ -52,6 +71,6 @@ class Auth
     */
     public function authConfig()
     {
-        return require($this->getPath()['config'] . '/auth.php');
+        return require($this->getPath()['config'].'/auth.php');
     }
 }

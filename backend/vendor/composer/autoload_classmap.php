@@ -6,16 +6,4 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'config\\namespaces' => $baseDir . '/config/namespaces.php',
-    'config\\paths' => $baseDir . '/config/paths.php',
-    'mvc\\controllers\\Again\\Home' => $baseDir . '/mvc/controllers/Again/Home.php',
-    'mvc\\controllers\\Home' => $baseDir . '/mvc/controllers/Home.php',
-    'system\\Start' => $baseDir . '/framework/janggelan/system/start.php',
-    'system\\config\\Path' => $baseDir . '/framework/janggelan/system/config/Path.php',
-    'system\\core\\Controller' => $baseDir . '/framework/janggelan/system/core/Controller.php',
-    'system\\core\\Namespace' => $baseDir . '/framework/janggelan/system/core/Namespace.php',
-    'system\\core\\Request' => $baseDir . '/framework/janggelan/system/core/Request.php',
-    'system\\dragon_fire\\exception\\DragonHandler' => $baseDir . '/framework/janggelan/system/dragon_fire/exception/DragonHandler.php',
-    'system\\dragon_fire\\register\\NamespaceController' => $baseDir . '/framework/janggelan/system/dragon_fire/register/NamespaceController.php',
-    'system\\dragon_fire\\register\\RequestController' => $baseDir . '/framework/janggelan/system/dragon_fire/register/RequestController.php',
 );

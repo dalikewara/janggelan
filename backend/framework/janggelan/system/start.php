@@ -1,19 +1,18 @@
-<?php
-
-session_start();
+<?php session_start();
 
 /**
-* Janggelan: Hanya Sebuah Framework PHP Yang Tidak Terduga
+* Janggelan: Just An Unexpected PHP Framework
 *******************************************************************************
 *
 * @package   Janggelan
 * @author    Dali Kewara   <dalikewara@windowslive.com>
 */
-//
-// Mengatur 'debug' dan 'error reporting' -------------------------------------
+
+// Setting up debug and error reporting
 $debug = new \system\parents\Debug;
-// Meminta 'Request' ----------------------------------------------------------
-$request = new \system\parents\Request;$request->get();
-// Menghubungkan 'Request' ----------------------------------------------------
+// Getting requests
+$request = new \system\parents\Request;
+$request->cacheRequest ? (file_exists($request->uri) ? FALSE :
+    $request->get()) : $request->get();
+// Connecting requests
 $bridge = new \system\parents\Bridge;
-// ----------------------------------------------------------------------------
