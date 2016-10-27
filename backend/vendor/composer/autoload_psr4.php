@@ -6,14 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'vendor\\' => array($vendorDir . ''),
-    'system\\' => array($baseDir . '/framework/janggelan/system'),
-    'register\\' => array($baseDir . '/register'),
-    'provider\\' => array($baseDir . '/../worksheet/providers'),
-    'phpssdb\\' => array($vendorDir . '/phpfastcache/phpssdb/src/phpssdb'),
-    'phpFastCache\\' => array($vendorDir . '/phpfastcache/phpfastcache/src/phpFastCache'),
-    'mvc\\' => array($baseDir . '/../worksheet'),
-    'config\\' => array($baseDir . '/config'),
-    'Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
-    'Predis\\' => array($vendorDir . '/predis/predis/src'),
+    'tool\\' => array($baseDir . '/../worksheet/tools'),
+    'model\\' => array($baseDir . '/../worksheet/models'),
+    'glob\\' => array($baseDir . '/global'),
+    'framework\\' => array($baseDir . '/framework/janggelan/system/src'),
+    'controller\\' => array($baseDir . '/../worksheet/controllers'),
 );

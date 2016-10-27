@@ -4,67 +4,59 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite6d2fd568a827c02148b852cd150eb46
+class ComposerStaticInit0f6ed972a9220659e8db93c9c6c10e8b
 {
     public static $prefixLengthsPsr4 = array (
-        's' => 
+        't' => 
         array (
-            'system\\' => 7,
-        ),
-        'r' => 
-        array (
-            'register\\' => 9,
+            'tool\\' => 5,
         ),
         'm' => 
         array (
-            'mvc\\' => 4,
+            'model\\' => 6,
+        ),
+        'g' => 
+        array (
+            'glob\\' => 5,
+        ),
+        'f' => 
+        array (
+            'framework\\' => 10,
         ),
         'c' => 
         array (
-            'config\\' => 7,
+            'controller\\' => 11,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'system\\' => 
+        'tool\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/framework/janggelan/system',
+            0 => __DIR__ . '/../..' . '/../worksheet/tools',
         ),
-        'register\\' => 
+        'model\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/register',
+            0 => __DIR__ . '/../..' . '/../worksheet/models',
         ),
-        'mvc\\' => 
+        'glob\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/mvc',
+            0 => __DIR__ . '/../..' . '/global',
         ),
-        'config\\' => 
+        'framework\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/config',
+            0 => __DIR__ . '/../..' . '/framework/janggelan/system/src',
         ),
-    );
-
-    public static $classMap = array (
-        'config\\namespaces' => __DIR__ . '/../..' . '/config/namespaces.php',
-        'config\\paths' => __DIR__ . '/../..' . '/config/paths.php',
-        'mvc\\controllers\\Again\\Home' => __DIR__ . '/../..' . '/mvc/controllers/Again/Home.php',
-        'mvc\\controllers\\Home' => __DIR__ . '/../..' . '/mvc/controllers/Home.php',
-        'system\\Start' => __DIR__ . '/../..' . '/framework/janggelan/system/start.php',
-        'system\\config\\Path' => __DIR__ . '/../..' . '/framework/janggelan/system/config/Path.php',
-        'system\\core\\Controller' => __DIR__ . '/../..' . '/framework/janggelan/system/core/Controller.php',
-        'system\\core\\Namespace' => __DIR__ . '/../..' . '/framework/janggelan/system/core/Namespace.php',
-        'system\\core\\Request' => __DIR__ . '/../..' . '/framework/janggelan/system/core/Request.php',
-        'system\\dragon_fire\\exception\\DragonHandler' => __DIR__ . '/../..' . '/framework/janggelan/system/dragon_fire/exception/DragonHandler.php',
-        'system\\dragon_fire\\register\\NamespaceController' => __DIR__ . '/../..' . '/framework/janggelan/system/dragon_fire/register/NamespaceController.php',
-        'system\\dragon_fire\\register\\RequestController' => __DIR__ . '/../..' . '/framework/janggelan/system/dragon_fire/register/RequestController.php',
+        'controller\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/../worksheet/controllers',
+        ),
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite6d2fd568a827c02148b852cd150eb46::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite6d2fd568a827c02148b852cd150eb46::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite6d2fd568a827c02148b852cd150eb46::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0f6ed972a9220659e8db93c9c6c10e8b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0f6ed972a9220659e8db93c9c6c10e8b::$prefixDirsPsr4;
 
         }, null, ClassLoader::class);
     }

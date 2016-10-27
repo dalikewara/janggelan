@@ -1,33 +1,33 @@
 <?php
 
 /**
-* Janggelan: Just An Unexpected PHP Framework
+* Janggelan: Just an unexpected PHP framework
 *******************************************************************************
 *
 * @package   Janggelan
 * @author    Dali Kewara   <dalikewara@windowslive.com>
 */
 
-// Getting "FORCE URI" configuration
-$forceUri = preg_replace('/\s/', '', file_get_contents(__DIR__.'/force.config'));
-
-// Filtering "FORCE URI"
-if($forceUri == 'FORCEURI:NO')
+// Filtering for 'force.uri' config.
+// If 'force.uri' is TRUE, then system will not checked for available path folder
+// based on the uri. The system will always throws uri through into Janggelan kernel.
+if(preg_match('/(TRUE)/', file_get_contents(__DIR__.'/force.uri')))
 {
-    // Checking URI is it a folder or not
+    // Activate Composer autoload/psr-4 feature and starting the framework.
+    require_once 'vendor/autoload.php';
+    require_once 'framework/janggelan/system/src/start.php';
+}
+else
+{
+    // Checking if uri is a folder or not
     $uri = ($_SERVER['REQUEST_URI'] !== '/' && file_exists(ltrim(urldecode(
         parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)), '/'))) ? FALSE : TRUE;
 
     // Activate Composer autoload/psr-4 feature and starting the framework
-    // if the $uri is TRUE
+    // if the uri is TRUE(not a folder).
     if($uri)
     {
         require_once 'vendor/autoload.php';
-        require_once 'framework/janggelan/system/start.php';
+        require_once 'framework/janggelan/system/src/start.php';
     }
-}
-elseif($forceUri == 'FORCEURI:YES')
-{
-    require_once 'vendor/autoload.php';
-    require_once 'framework/janggelan/system/start.php';
 }

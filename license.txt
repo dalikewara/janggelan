@@ -1,4 +1,4 @@
-Janggelan: Just An Unexpected PHP Framework
+Janggelan: Just an unexpected PHP framework
 -------------------------------------------------------------------------------
 
 The MIT License (MIT)

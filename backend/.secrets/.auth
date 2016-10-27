@@ -1,4 +1,0 @@
-MODEL:Example
-TABLE:users
-INDEXES:username,password
-INDEX_COLUMN:username,password

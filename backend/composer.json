@@ -1,15 +1,11 @@
 {
     "autoload": {
         "psr-4": {
-            "mvc\\": "../worksheet",
-            "register\\": "register",
-            "config\\": "config",
-            "system\\": "framework/janggelan/system",
-            "provider\\": "../worksheet/providers",
-            "vendor\\": "vendor"
+            "controller\\": "../worksheet/controllers",
+            "model\\": "../worksheet/models",
+            "glob\\": "global",
+            "framework\\": "framework/janggelan/system/src",
+            "tool\\": "../worksheet/tools"
         }
-    },
-    "require": {
-        "phpFastCache/phpFastCache": "^5.0"
     }
 }
