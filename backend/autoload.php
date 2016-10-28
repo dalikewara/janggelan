@@ -21,11 +21,11 @@ else
 {
     // Checking if uri is a folder or not
     $uri = ($_SERVER['REQUEST_URI'] !== '/' && file_exists(ltrim(urldecode(
-        parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)), '/'))) ? FALSE : TRUE;
+        parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)), '/'))) ? TRUE : FALSE;
 
     // Activate Composer autoload/psr-4 feature and starting the framework
-    // if the uri is TRUE(not a folder).
-    if($uri)
+    // if the uri is FALSE(not a folder).
+    if(!$uri)
     {
         require_once 'vendor/autoload.php';
         require_once 'framework/janggelan/system/src/start.php';
