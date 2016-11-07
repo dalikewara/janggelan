@@ -21,7 +21,7 @@ class ViewController extends Blueprint
         try
         {
             // If the view doesn't exist, throw it to Exception.
-            if(($name[0] === '/' AND !file_exists($this->getPaths()['public'] . $name . '.php')) OR
+            if(($name[0] === '/' AND !file_exists($this->getPaths()['root'] . $name . '.php')) OR
             ($name[0] !== '/' AND !file_exists($this->getPaths()['view'] . '/' . $name . '.php')))
             {
                 Throw new Handler(\framework\parents\Message::viewDoesntExists($name));
@@ -30,7 +30,7 @@ class ViewController extends Blueprint
             // Generating 'View' path
             if($name[0] === '/')
             {
-                $path = $this->getPaths()['public'] . $name . '.php';
+                $path = $this->getPaths()['root'] . $name . '.php';
             }
             else
             {
