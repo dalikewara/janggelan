@@ -2,13 +2,14 @@
 
 use framework\kernel\jobs\traits\support\ProtectedRule;
 use framework\kernel\jobs\traits\support\LoadView;
+use framework\kernel\jobs\traits\support\Cache;
 
 /*
  * Class for base Controller that already included some tasks.
 */
 class Controller
 {
-    use ProtectedRule, LoadView;
+    use ProtectedRule, LoadView, Cache;
 
     function __construct()
     {
