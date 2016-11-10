@@ -67,7 +67,7 @@ class Request extends Blueprint
             // Do standart process if user doesn't use route cache system.
             require_once $this->getPaths()['worksheet'] . '/requests.php';
 
-            return $this->routes;
+            return json_decode(json_encode($this->routes));
         }
     }
 
